@@ -1,31 +1,41 @@
-"use client"; // ইন্টারঅ্যাক্টিভিটি (Dropdown, Mobile Menu) এর জন্য এটি আবশ্যক
+"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useAuth } from "@/context/AuthContext"; // আমাদের বানানো Auth Context
+import { useAuth } from "@/context/AuthContext";
 import { FaBars, FaTimes, FaUserCircle, FaLaptopCode } from "react-icons/fa";
 
 const Navbar = () => {
-  const { user, logOut } = useAuth(); // গ্লোবাল স্টেট থেকে ইউজার এবং লগআউট ফাংশন নিলাম
-  const [isOpen, setIsOpen] = useState(false); // মোবাইল মেনুর স্টেট
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // প্রোফাইল ড্রপডাউনের স্টেট
+  const { user, logOut } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-  // ৪+ কমন রুটস বা লিংকসমূহ
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      setIsDropdownOpen(false);
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Logout failed:", error.message);
+    }
+  };
+
+  // আপনার নতুন ফাইনাল স্ট্রাকচার অনুযায়ী পাথ ম্যাপ করা হয়েছে
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "All Products", path: "/items" },
+    { name: "All Gadgets", path: "/items" },
     { name: "About Us", path: "/about" },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-gray-900 border-b border-gray-800 text-white shadow-md backdrop-blur-md bg-opacity-95">
+    <nav className="sticky top-0 z-50 bg-gray-900/95 border-b border-gray-800 text-white shadow-md backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* ১. লোগো সেকশন */}
-          <div className="flex-shrink-0 flex items-center gap-2">
+          {/* লোগো */}
+          <div className="flex-shrink-0 flex items-center">
             <Link
               href="/"
               className="flex items-center gap-2 text-xl font-bold text-blue-500 hover:text-blue-400 transition"
@@ -35,27 +45,26 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* ২. ডেক্সটপ মেনু লিংকসমূহ */}
+          {/* ডেক্সটপ মেনু লিংক */}
           <div className="hidden md:flex space-x-8">
             {navLinks.map((link, index) => (
               <Link
                 key={index}
                 href={link.path}
-                className="text-gray-300 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                className="text-gray-350 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >
                 {link.name}
               </Link>
             ))}
           </div>
 
-          {/* ৩. অথেনটিকেশন / প্রোফাইল ড্রপডাউন (ডেক্সটপ) */}
+          {/* ডেক্সটপ প্রোফাইল ড্রপডাউন / অথেনটিকেশন */}
           <div className="hidden md:flex items-center gap-4">
             {user ? (
-              // লগইন করা থাকলে এই ড্রপডাউনটি দেখাবে
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
-                  className="flex items-center gap-2 bg-gray-850 p-2 rounded-full border border-gray-700 hover:border-blue-500 focus:outline-none transition"
+                  className="flex items-center gap-2 bg-gray-800/80 p-2 rounded-full border border-gray-700 hover:border-blue-500 focus:outline-none transition"
                 >
                   {user.photoURL ? (
                     <img
@@ -67,12 +76,12 @@ const Navbar = () => {
                     <FaUserCircle className="text-xl text-gray-400" />
                   )}
                   <span className="text-sm max-w-[100px] truncate">
-                    {user.displayName || user.email}
+                    {user.displayName || user.email.split("@")[0]}
                   </span>
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg py-1 z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg py-1 z-50 animate-fade-in">
                     <div className="px-4 py-2 text-xs text-gray-400 border-b border-gray-700 font-semibold truncate">
                       {user.email}
                     </div>
@@ -81,21 +90,18 @@ const Navbar = () => {
                       onClick={() => setIsDropdownOpen(false)}
                       className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-blue-500"
                     >
-                      Add Product
+                      Add Gadget
                     </Link>
                     <Link
                       href="/items/manage"
                       onClick={() => setIsDropdownOpen(false)}
                       className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-blue-500"
                     >
-                      Manage Products
+                      Manage Gadgets
                     </Link>
                     <button
-                      onClick={() => {
-                        logOut();
-                        setIsDropdownOpen(false);
-                      }}
-                      className="w-full text-left block px-4 py-2 text-sm text-red-400 hover:bg-gray-700"
+                      onClick={handleLogout}
+                      className="w-full text-left block px-4 py-2 text-sm text-red-400 hover:bg-gray-700 font-medium"
                     >
                       Logout
                     </button>
@@ -103,11 +109,10 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              // লগইন না করা থাকলে এই বাটনগুলো দেখাবে
               <div className="flex items-center gap-4">
                 <Link
                   href="/login"
-                  className="text-gray-300 hover:text-white text-sm font-medium"
+                  className="text-gray-300 hover:text-white text-sm font-medium transition"
                 >
                   Login
                 </Link>
@@ -121,7 +126,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* ৪. মোবাইল হ্যামবার্গার বাটন */}
+          {/* মোবাইল হ্যামবার্গার মেনু বাটন */}
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
@@ -137,9 +142,9 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* ৫. রেসপনসিভ মোবাইল মেনু লেআউট */}
+      {/* মোবাইল রেসপনসিভ মেনু */}
       {isOpen && (
-        <div className="md:hidden bg-gray-900 border-b border-gray-800 animate-fade-in-down">
+        <div className="md:hidden bg-gray-900 border-b border-gray-800 transition">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link, index) => (
               <Link
@@ -152,7 +157,6 @@ const Navbar = () => {
               </Link>
             ))}
 
-            {/* মোবাইল প্রোফাইল বা লগইন লিঙ্ক */}
             <div className="border-t border-gray-800 mt-4 pt-4">
               {user ? (
                 <>
@@ -164,20 +168,17 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className="text-gray-300 hover:bg-gray-800 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium"
                   >
-                    Add Product
+                    Add Gadget
                   </Link>
                   <Link
                     href="/items/manage"
                     onClick={() => setIsOpen(false)}
                     className="text-gray-300 hover:bg-gray-800 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium"
                   >
-                    Manage Products
+                    Manage Gadgets
                   </Link>
                   <button
-                    onClick={() => {
-                      logOut();
-                      setIsOpen(false);
-                    }}
+                    onClick={handleLogout}
                     className="w-full text-left text-red-400 hover:bg-gray-800 block px-3 py-2 rounded-md text-base font-medium"
                   >
                     Logout

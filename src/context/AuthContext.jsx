@@ -1,4 +1,4 @@
-"use client"; // Next.js App Router-এ Context ব্যবহারের জন্য এটি অবশ্যই দিতে হবে
+"use client"; // Next.js-এ Context এবং state ব্যবহারের জন্য এটি আবশ্যক
 
 import { createContext, useContext, useEffect, useState } from "react";
 import {
@@ -7,21 +7,22 @@ import {
   signOut,
   signInWithPopup,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
-import { auth, googleProvider } from "@/lib/firebase"; // আমাদের বানানো ফায়ারবেস ফাইল
+import { auth, googleProvider } from "@/lib/firebase"; // আপনার নতুন স্ট্রাকচার অনুযায়ী পাথ
 
-// ১. কনটেক্সট তৈরি করলাম
+// ১. গ্লোবাল পাইপলাইন (Context) তৈরি করলাম
 const AuthContext = createContext({});
 
-// ২. কাস্টম হুক এক্সপোর্ট (যা ন্যাভবার খুঁজছে এবং এরর দিচ্ছে)
+// ২. কাস্টম হুক (useAuth) তৈরি করলাম, যা দিয়ে অন্য ফাইলে সহজে ডেটা রিড করা যাবে
 export const useAuth = () => useContext(AuthContext);
 
-// ৩. প্রোভাইডার কম্পোনেন্ট যা পুরো অ্যাপকে মুড়িয়ে রাখবে
+// ৩. আসল ডেটা প্রোভাইডার কম্পোনেন্ট (AuthContextProvider)
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null); // ইউজারের লগইন স্টেট রাখার জন্য
+  const [loading, setLoading] = useState(true); // ফায়ারবেস লোড হওয়া পর্যন্ত অপেক্ষা করতে
 
-  // ফায়ারবেস ইউজার অবজার্ভার (লগইন স্টেট চেঞ্জ ট্র্যাক করে)
+  // ফায়ারবেসের আসল ইউজার ট্র্যাক করার অবজারভার
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -30,40 +31,49 @@ export const AuthContextProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  // সাইন-আপ ফাংশন
-  const signUp = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  // কাস্টম সাইন-আপ ফাংশন
+  const signUp = async (email, password, name) => {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
+    if (name) {
+      await updateProfile(userCredential.user, { displayName: name });
+    }
+    return userCredential.user;
   };
 
-  // লগইন ফাংশন
+  // কাস্টম লগইন ফাংশন
   const logIn = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // গুগল লগইন ফাংশন
+  // গুগল সাইন-ইন ফাংশন
   const loginWithGoogle = () => {
     return signInWithPopup(auth, googleProvider);
   };
 
-  // লগ-আউট ফাংশন
+  // লগআউট ফাংশন
   const logOut = () => {
     return signOut(auth);
   };
 
+  // এখানে আমরা AuthContext-এর মাধ্যমে সব ডেটা নিচের চিলড্রেনদের পাঠিয়ে দিচ্ছি
   return (
     <AuthContext.Provider
       value={{ user, loading, signUp, logIn, loginWithGoogle, logOut }}
     >
       {loading ? (
-        // অ্যাপ লোড হওয়ার সময় ব্যাকগ্রাউন্ডে একটি সুন্দর মডার্ন লোডার দেখাবে
-        <div className="flex h-screen items-center justify-center bg-gray-950 text-white font-semibold">
+        // অ্যাপ চালু হওয়ার সময় একটি মডার্ন ডার্ক লোডার স্ক্রিন
+        <div className="flex h-screen items-center justify-center bg-gray-950 text-white font-medium">
           <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             <p className="text-gray-400 tracking-wider">Loading TechNest...</p>
           </div>
         </div>
       ) : (
-        children
+        children // লোডিং শেষ হলে আসল ওয়েবসাইট (Navbar, Footer, Pages) দেখাবে
       )}
     </AuthContext.Provider>
   );
