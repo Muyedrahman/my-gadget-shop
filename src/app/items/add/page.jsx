@@ -372,7 +372,7 @@ const AddGadgetMinusPage = () => {
       );
 
       setSuccessMessage(
-        "🚀 Success! The premium gadget has been injected into our ecosystem.",
+        " Success! The premium gadget has been injected into our ecosystem.",
       );
 
       // Reset form fields
