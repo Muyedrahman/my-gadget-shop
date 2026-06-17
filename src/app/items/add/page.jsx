@@ -282,7 +282,6 @@
 // export default AddGadgetMinusPage;
 
 // 2
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -297,13 +296,14 @@ import {
   FaInfoCircle,
   FaSpinner,
   FaLock,
+  FaChevronDown, // Added for custom select arrow
 } from "react-icons/fa";
 
 const AddGadgetMinusPage = () => {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  
+  // Form States
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Laptops & PCs");
@@ -312,16 +312,17 @@ const AddGadgetMinusPage = () => {
   const [stock, setStock] = useState("");
 
   const [formLoading, setFormLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
- 
+  // Guard Route: Redirect unauthorized users
   useEffect(() => {
     if (!loading && !user) {
       router.push("/login");
     }
   }, [user, loading, router]);
 
- 
+  // Loading Screen
   if (loading) {
     return (
       <div className="flex h-[calc(100vh-8rem)] items-center justify-center bg-gray-950 text-white">
@@ -330,7 +331,7 @@ const AddGadgetMinusPage = () => {
     );
   }
 
-  
+  // Access Denied Screen
   if (!user) {
     return (
       <div className="flex h-[calc(100vh-8rem)] flex-col items-center justify-center bg-gray-950 text-gray-400 gap-2">
@@ -339,12 +340,12 @@ const AddGadgetMinusPage = () => {
       </div>
     );
   }
-  
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
     setFormLoading(true);
     setSuccessMessage("");
+    setErrorMessage("");
 
     const newGadget = {
       id: Date.now().toString(),
@@ -360,21 +361,21 @@ const AddGadgetMinusPage = () => {
     };
 
     try {
+      // Network pipeline simulation
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
       const existingGadgets =
         JSON.parse(localStorage.getItem("myGadgets")) || [];
-
       localStorage.setItem(
         "myGadgets",
         JSON.stringify([...existingGadgets, newGadget]),
       );
 
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      console.log("Successfully Registered New Gadget:", newGadget);
       setSuccessMessage(
-        "  Success! The premium gadget has been injected into our ecosystem.",
+        "🚀 Success! The premium gadget has been injected into our ecosystem.",
       );
 
+      // Reset form fields
       setName("");
       setPrice("");
       setImage("");
@@ -386,6 +387,7 @@ const AddGadgetMinusPage = () => {
       }, 2000);
     } catch (error) {
       console.error("Submission failed", error);
+      setErrorMessage("❌ Pipeline failure. Unable to save gadget.");
     } finally {
       setFormLoading(false);
     }
@@ -397,6 +399,7 @@ const AddGadgetMinusPage = () => {
 
       <div className="max-w-2xl mx-auto px-4">
         <div className="bg-gray-900/40 border border-gray-800 p-6 sm:p-10 rounded-3xl backdrop-blur-md shadow-2xl">
+          {/* Header */}
           <div className="text-center mb-8">
             <span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-md text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 mb-3 uppercase tracking-wider">
               <FaLock className="text-[10px]" /> Protected Route
@@ -410,13 +413,20 @@ const AddGadgetMinusPage = () => {
             </p>
           </div>
 
+          {/* Feedback Messages */}
           {successMessage && (
-            <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-sm font-medium animate-fade-in text-center">
+            <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-sm font-medium text-center">
               {successMessage}
+            </div>
+          )}
+          {errorMessage && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm font-medium text-center">
+              {errorMessage}
             </div>
           )}
 
           <form onSubmit={handleAddProduct} className="space-y-5">
+            {/* 1. Gadget Name */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase text-gray-400 tracking-wider">
                 Gadget Name
@@ -436,6 +446,7 @@ const AddGadgetMinusPage = () => {
               </div>
             </div>
 
+            {/* 2. Price & Stock Dynamic Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase text-gray-400 tracking-wider">
@@ -478,27 +489,32 @@ const AddGadgetMinusPage = () => {
               </div>
             </div>
 
+            {/* 3. Category Custom Dropdown */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase text-gray-400 tracking-wider">
                 Category
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500 text-sm">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500 text-sm z-10 pointer-events-none">
                   <FaListAlt />
                 </span>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-gray-950 text-gray-300 text-sm rounded-xl block pl-10 pr-4 py-3 border border-gray-800 focus:border-blue-500 outline-none transition appearance-none cursor-pointer"
+                  className="w-full bg-gray-950 text-gray-300 text-sm rounded-xl block pl-10 pr-10 py-3 border border-gray-800 focus:border-blue-500 outline-none transition appearance-none cursor-pointer"
                 >
                   <option value="Laptops & PCs">Laptops & PCs</option>
                   <option value="Smartphones">Smartphones</option>
                   <option value="Audio & Sound">Audio & Sound</option>
                   <option value="Gaming Gear">Gaming Gear</option>
                 </select>
+                <span className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-500 text-xs pointer-events-none">
+                  <FaChevronDown />
+                </span>
               </div>
             </div>
 
+            {/* 4. Product Image URL */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase text-gray-400 tracking-wider">
                 Product Image URL
@@ -517,6 +533,7 @@ const AddGadgetMinusPage = () => {
               </div>
             </div>
 
+            {/* 5. Product Description */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase text-gray-400 tracking-wider">
                 Product Description
@@ -536,6 +553,7 @@ const AddGadgetMinusPage = () => {
               </div>
             </div>
 
+            {/* Action Trigger */}
             <button
               type="submit"
               disabled={formLoading}
