@@ -3,7 +3,18 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { FaBars, FaTimes, FaUserCircle, FaLaptopCode } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaUserCircle,
+  FaLaptopCode,
+  FaPlus,
+  FaTasks,
+  FaSignOutAlt,
+  FaInfoCircle,
+  FaHome,
+  FaMobileAlt,
+} from "react-icons/fa";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
@@ -23,18 +34,18 @@ const Navbar = () => {
     }
   };
 
-  // আপনার নতুন ফাইনাল স্ট্রাকচার অনুযায়ী পাথ ম্যাপ করা হয়েছে
+ 
   const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "All Gadgets", path: "/items" },
-    { name: "About Us", path: "/about" },
+    { name: "Home", path: "/", icon: <FaHome /> },
+    { name: "All Gadgets", path: "/items", icon: <FaMobileAlt /> },
+    { name: "About Us", path: "/about", icon: <FaInfoCircle /> },
   ];
 
   return (
     <nav className="sticky top-0 z-50 bg-gray-900/95 border-b border-gray-800 text-white shadow-md backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* লোগো */}
+       
           <div className="flex-shrink-0 flex items-center">
             <Link
               href="/"
@@ -45,7 +56,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* ডেক্সটপ মেনু লিংক */}
+          
           <div className="hidden md:flex space-x-8">
             {navLinks.map((link, index) => (
               <Link
@@ -58,52 +69,56 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* ডেক্সটপ প্রোফাইল ড্রপডাউন / অথেনটিকেশন */}
+         
           <div className="hidden md:flex items-center gap-4">
             {user ? (
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
-                  className="flex items-center gap-2 bg-gray-800/80 p-2 rounded-full border border-gray-700 hover:border-blue-500 focus:outline-none transition"
+                  className="flex items-center gap-2 bg-gray-800/80 p-2 rounded-full border border-gray-700 hover:border-blue-500 focus:outline-none transition animate-fade-in"
                 >
                   {user.photoURL ? (
                     <img
                       src={user.photoURL}
                       alt="profile"
-                      className="w-6 h-6 rounded-full"
+                      className="w-6 h-6 rounded-full object-cover"
                     />
                   ) : (
                     <FaUserCircle className="text-xl text-gray-400" />
                   )}
-                  <span className="text-sm max-w-[100px] truncate">
+                  <span className="text-sm max-w-[100px] truncate pr-1">
                     {user.displayName || user.email.split("@")[0]}
                   </span>
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg py-1 z-50 animate-fade-in">
-                    <div className="px-4 py-2 text-xs text-gray-400 border-b border-gray-700 font-semibold truncate">
+                  <div className="absolute right-0 mt-2 w-52 bg-gray-900 border border-gray-800 rounded-xl shadow-2xl py-2 z-50 border-t-2 border-t-blue-500">
+                    <div className="px-4 py-2 text-xs text-gray-400 border-b border-gray-800 font-semibold truncate mb-1">
                       {user.email}
                     </div>
                     <Link
                       href="/items/add"
                       onClick={() => setIsDropdownOpen(false)}
-                      className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-blue-500"
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-blue-400 transition-colors"
                     >
-                      Add Gadget
+                      <FaPlus className="text-xs" />
+                      <span>Add Gadget</span>
                     </Link>
                     <Link
                       href="/items/manage"
                       onClick={() => setIsDropdownOpen(false)}
-                      className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-blue-500"
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-blue-400 transition-colors"
                     >
-                      Manage Gadgets
+                      <FaTasks className="text-xs" />
+                      <span>Manage Gadgets</span>
                     </Link>
+                    <div className="border-t border-gray-800 my-1"></div>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left block px-4 py-2 text-sm text-red-400 hover:bg-gray-700 font-medium"
+                      className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-950/30 font-medium transition-colors"
                     >
-                      Logout
+                      <FaSignOutAlt className="text-xs" />
+                      <span>Logout</span>
                     </button>
                   </div>
                 )}
@@ -126,7 +141,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* মোবাইল হ্যামবার্গার মেনু বাটন */}
+           
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
@@ -142,46 +157,56 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* মোবাইল রেসপনসিভ মেনু */}
+   
       {isOpen && (
-        <div className="md:hidden bg-gray-900 border-b border-gray-800 transition">
+        <div className="md:hidden bg-gray-950 border-b border-gray-800 transition-all duration-300">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link, index) => (
               <Link
                 key={index}
                 href={link.path}
                 onClick={() => setIsOpen(false)}
-                className="text-gray-300 hover:bg-gray-800 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium"
+                className="flex items-center gap-3 text-gray-350 hover:bg-gray-900 hover:text-blue-500 block px-3 py-2.5 rounded-xl text-base font-medium transition"
               >
-                {link.name}
+                <span className="text-gray-500">{link.icon}</span>
+                <span>{link.name}</span>
               </Link>
             ))}
 
-            <div className="border-t border-gray-800 mt-4 pt-4">
+            <div className="border-t border-gray-900 mt-4 pt-4">
               {user ? (
                 <>
-                  <div className="px-3 py-2 text-sm font-semibold text-blue-400 truncate">
+                   
+                  <div className="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    Manager Account
+                  </div>
+                  <div className="px-3 pb-3 text-sm font-semibold text-blue-400 truncate mb-2">
                     {user.email}
                   </div>
+
+                 
                   <Link
                     href="/items/add"
                     onClick={() => setIsOpen(false)}
-                    className="text-gray-300 hover:bg-gray-800 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium"
+                    className="flex items-center gap-3 text-gray-350 hover:bg-gray-900 hover:text-blue-400 block px-3 py-2.5 rounded-xl text-base font-medium transition"
                   >
-                    Add Gadget
+                    <FaPlus className="text-gray-500 text-sm" />
+                    <span>Add Gadget</span>
                   </Link>
                   <Link
                     href="/items/manage"
                     onClick={() => setIsOpen(false)}
-                    className="text-gray-300 hover:bg-gray-800 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium"
+                    className="flex items-center gap-3 text-gray-350 hover:bg-gray-900 hover:text-blue-400 block px-3 py-2.5 rounded-xl text-base font-medium transition"
                   >
-                    Manage Gadgets
+                    <FaTasks className="text-gray-500 text-sm" />
+                    <span>Manage Gadgets</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left text-red-400 hover:bg-gray-800 block px-3 py-2 rounded-md text-base font-medium"
+                    className="w-full flex items-center gap-3 text-left text-red-400 hover:bg-red-950/20 block px-3 py-2.5 rounded-xl text-base font-medium transition"
                   >
-                    Logout
+                    <FaSignOutAlt className="text-red-500/70 text-sm" />
+                    <span>Logout</span>
                   </button>
                 </>
               ) : (
@@ -189,14 +214,14 @@ const Navbar = () => {
                   <Link
                     href="/login"
                     onClick={() => setIsOpen(false)}
-                    className="text-center text-gray-300 border border-gray-700 hover:bg-gray-800 py-2 rounded-md text-base font-medium"
+                    className="text-center text-gray-300 border border-gray-800 hover:bg-gray-900 py-2.5 rounded-xl text-base font-medium transition"
                   >
                     Login
                   </Link>
                   <Link
                     href="/register"
                     onClick={() => setIsOpen(false)}
-                    className="text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md text-base font-medium"
+                    className="text-center bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-base font-medium transition shadow-lg"
                   >
                     Register
                   </Link>

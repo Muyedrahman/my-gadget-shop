@@ -15,7 +15,7 @@ const LoginForm = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ইমেইল ও পাসওয়ার্ড দিয়ে লগইন হ্যান্ডলার
+   
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -23,7 +23,7 @@ const LoginForm = () => {
 
     try {
       await logIn(email, password);
-      router.push("/"); // লগইন সফল হলে হোমপেজে রিডাইরেক্ট
+      router.push("/");  
     } catch (err) {
       setError(err.message.replace("Firebase: ", ""));
     } finally {
@@ -31,7 +31,7 @@ const LoginForm = () => {
     }
   };
 
-  // গুগল সাইন-ইন হ্যান্ডলার
+ 
   const handleGoogleSignIn = async () => {
     setError("");
     try {
@@ -60,7 +60,7 @@ const LoginForm = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* ইমেইল ইনপুট */}
+      
         <div className="relative">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500 text-sm">
             <FaEnvelope />
@@ -75,7 +75,7 @@ const LoginForm = () => {
           />
         </div>
 
-        {/* পাসওয়ার্ড ইনপুট */}
+        
         <div className="relative">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500 text-sm">
             <FaLock />
@@ -90,7 +90,7 @@ const LoginForm = () => {
           />
         </div>
 
-        {/* সাবমিট বাটন */}
+       
         <button
           type="submit"
           disabled={loading}
@@ -100,7 +100,7 @@ const LoginForm = () => {
         </button>
       </form>
 
-      {/* ডিভাইডার */}
+    
       <div className="relative flex py-5 items-center">
         <div className="flex-grow border-t border-gray-800/80"></div>
         <span className="flex-shrink mx-4 text-gray-500 text-xs font-semibold uppercase tracking-wider">
@@ -109,7 +109,7 @@ const LoginForm = () => {
         <div className="flex-grow border-t border-gray-800/80"></div>
       </div>
 
-      {/* গুগল সাইন-ইন বাটন */}
+    
       <button
         onClick={handleGoogleSignIn}
         className="w-full flex items-center justify-center gap-2 bg-gray-950 border border-gray-800 hover:border-gray-700 text-gray-300 hover:text-white font-medium py-3 px-4 rounded-xl transition"

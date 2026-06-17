@@ -12,14 +12,14 @@ import {
 } from "react-icons/fa";
 
 const GadgetDetailsPage = ({ params }) => {
-  // Next.js-এর আধুনিক প্র্যাকটিস অনুযায়ী ডাইনামিক রাউট আইডি (params) আনর‍্যাপ করা
+   
   const unwrappedParams = React.use(params);
   const id = unwrappedParams.id;
 
-  // আমাদের ডেটাসেট থেকে আইডি ম্যাচ করে গ্যাজেটটি খুঁজে বের করা
+  
   const gadget = gadgets.find((g) => g.id === id);
 
-  // যদি ভুল বা অবাস্তব কোনো আইডি ইউজার ইউআরএল-এ টাইপ করে (Error Handling)
+ 
   if (!gadget) {
     return (
       <div className="bg-gray-950 min-h-screen flex items-center justify-center text-gray-100 px-4">
@@ -45,7 +45,7 @@ const GadgetDetailsPage = ({ params }) => {
   return (
     <div className="bg-gray-950 min-h-screen py-12 text-gray-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* ব্যাক বাটন */}
+     
         <div className="mb-8">
           <Link
             href="/items"
@@ -56,9 +56,9 @@ const GadgetDetailsPage = ({ params }) => {
           </Link>
         </div>
 
-        {/* মেইন প্রোডাক্ট গ্রিড */}
+       
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-gray-900/20 border border-gray-900 p-6 sm:p-10 rounded-3xl backdrop-blur-md">
-          {/* বাম কলাম: প্রোডাক্ট ইমেজ */}
+          
           <div className="relative aspect-video lg:aspect-square w-full overflow-hidden rounded-2xl bg-gray-950 border border-gray-800 flex items-center justify-center">
             <img
               src={gadget.image}
@@ -70,10 +70,10 @@ const GadgetDetailsPage = ({ params }) => {
             </div>
           </div>
 
-          {/* ডান কলাম: প্রোডাক্ট ডিটেইলস ও ইনফো */}
+          
           <div className="flex flex-col justify-between">
             <div>
-              {/* টাইটেল এবং রেটিং */}
+               
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                 <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
                   {gadget.name}
@@ -84,7 +84,7 @@ const GadgetDetailsPage = ({ params }) => {
                 </div>
               </div>
 
-              {/* প্রাইস ট্যাগ */}
+        
               <div className="flex items-center gap-4 mb-6">
                 <span className="text-3xl font-black text-white">
                   ${gadget.price}
@@ -105,7 +105,7 @@ const GadgetDetailsPage = ({ params }) => {
 
               <hr className="border-gray-900 my-6" />
 
-              {/* প্রোডাক্ট ডেসক্রিপশন */}
+              
               <div className="space-y-2">
                 <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400">
                   Overview
@@ -115,7 +115,7 @@ const GadgetDetailsPage = ({ params }) => {
                 </p>
               </div>
 
-              {/* ইন্ডাস্ট্রি স্ট্যান্ডার্ড স্পেসিফিকেশন টেবিল (ডাইনামিক রেন্ডারিং ট্রিক) */}
+             
               <div className="mt-8 space-y-3">
                 <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400">
                   Specifications
@@ -149,7 +149,7 @@ const GadgetDetailsPage = ({ params }) => {
               </div>
             </div>
 
-            {/* অ্যাকশন বাটনসমূহ */}
+            
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
               <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition shadow-lg shadow-blue-600/10 hover:-translate-y-0.5 active:translate-y-0">
                 Add to Cart
@@ -161,7 +161,7 @@ const GadgetDetailsPage = ({ params }) => {
           </div>
         </div>
 
-        {/* সেফটি পলিসি ট্রাস্ট ব্যাজ */}
+        
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="flex items-center gap-3 bg-gray-900/10 border border-gray-950 p-4 rounded-xl text-xs text-gray-400">
             <FaCheckCircle className="text-blue-500 text-lg shrink-0" />

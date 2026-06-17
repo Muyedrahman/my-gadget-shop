@@ -7,7 +7,7 @@ import { FaShoppingBag, FaArrowRight } from "react-icons/fa";
 const Hero = () => {
   return (
     <section className="relative overflow-hidden bg-gray-950 py-24 lg:py-32 flex items-center justify-center border-b border-gray-900">
-      {/* ব্যাকগ্রাউন্ড গ্লো ইফেক্ট */}
+      
       <div className="absolute top-1/4 left-1/2 -z-10 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[120px]"></div>
       <div className="absolute top-1/3 left-1/3 -z-10 h-[300px] w-[400px] rounded-full bg-cyan-500/5 blur-[100px]"></div>
 

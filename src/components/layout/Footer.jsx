@@ -27,7 +27,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* কুইক লিংকস */}
+           
           <div>
             <h3 className="text-white font-semibold mb-4 tracking-wider uppercase text-xs">
               Quick Links
@@ -60,7 +60,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* সোশ্যাল মিডিয়া ও কন্টাক্ট */}
+          
           <div>
             <h3 className="text-white font-semibold mb-4 tracking-wider uppercase text-xs">
               Connect With Us
@@ -94,7 +94,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* নিচের কপিরাইট সেকশন */}
+         
         <div className="border-t border-gray-900 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
           <p>© {currentYear} TechNest. All rights reserved.</p>
           <div className="flex space-x-6">

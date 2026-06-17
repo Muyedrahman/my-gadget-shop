@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { FaEye, FaArrowRight } from "react-icons/fa";
 
-// মক ডাটা (পরবর্তীতে src/lib/items.js এর সাথে সিঙ্ক হবে)
+// মক ডাটা (পরবর্তীতে src/lib/items.js এর সাথে সিঙ্ক হবে 
 const featuredGadgets = [
   {
     id: "1",

@@ -22,7 +22,7 @@ const RegisterForm = () => {
     setLoading(true);
 
     try {
-      // name প্যারামিটারটি আমাদের AuthContext-এর signUp ফাংশনে পাঠানো হচ্ছে
+       
       await signUp(email, password, name);
       router.push("/");
     } catch (err) {
@@ -50,7 +50,7 @@ const RegisterForm = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* নাম ইনপুট */}
+       
         <div className="relative">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500 text-sm">
             <FaUser />
@@ -65,7 +65,7 @@ const RegisterForm = () => {
           />
         </div>
 
-        {/* ইমেইল ইনপুট */}
+     
         <div className="relative">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500 text-sm">
             <FaEnvelope />
@@ -80,7 +80,7 @@ const RegisterForm = () => {
           />
         </div>
 
-        {/* পাসওয়ার্ড ইনপুট */}
+      
         <div className="relative">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500 text-sm">
             <FaLock />
@@ -95,7 +95,7 @@ const RegisterForm = () => {
           />
         </div>
 
-        {/* সাবমিট বাটন */}
+    
         <button
           type="submit"
           disabled={loading}
